@@ -26,5 +26,55 @@
 
 - магический метод __init__, который принимает a, вызывает super
 """
+
 from abc import ABC, abstractmethod
-from math import pi
+import math
+
+
+class Shape(ABC):
+
+    @abstractmethod
+    def get_perimeter(self):
+        pass
+
+    @abstractmethod
+    def get_square(self):
+        pass
+
+
+class Circle(Shape):
+
+    def __init__(self, r: float):
+        self.r = r
+
+    def get_perimeter(self):
+        return 2 * math.pi * self.r
+
+    def get_square(self):
+        return math.pi * self.r ** 2
+
+
+class Rectangle(Shape):
+
+    def __init__(self, a: float, b: float):
+        self.a = a
+        self.b = b
+
+    def get_perimeter(self):
+        return 2 * (self.a + self.b)
+
+    def get_square(self):
+        return self.a * self.b
+
+
+class Square(Rectangle):
+
+    def __init__(self, a: float, b=0):
+        super().__init__(a, b)
+        self.b = self.a
+        self.a = a
+
+
+if __name__ == '__main__':
+    sq = Square(5)
+    print(sq.get_perimeter, sq.get_square)
