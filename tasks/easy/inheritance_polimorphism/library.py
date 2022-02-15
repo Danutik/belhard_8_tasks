@@ -26,3 +26,47 @@
 
 Названия книг в сообщениях должны быть отсортированы по алфавиту.
 """
+
+
+class Person:
+    fullname: str
+    phone: str
+
+    def __init__(self, fullname: str, phone: str):
+        self.fullname = fullname
+        self.phone = phone
+
+
+class LibraryReader(Person):
+    uid: int
+    books: set
+
+    def __init__(self, fullname: str, phone: str, uid: int):
+        super().__init__(fullname, phone)
+        self.uid = uid
+        self.books = set()
+
+    def take_books(self, *args):
+        self.books.update(args)
+        sort_books = ", ".join(sorted(self.books))
+        if len(args) <= 3:
+            return f"{self.fullname} взял(а) книги: {sort_books}"
+        else:
+            return f"{self.fullname} взял(а) {len(args)} книги"
+
+    def return_book(self, *args):
+        ret_sort_books = ", ".join(sorted(args))
+        args = set(args)
+        if self.books.issuperset(args):
+            if len(args) <= 3:
+                return f"{self.fullname} вернул(а) книги: {ret_sort_books}"
+            else:
+                return f"{self.fullname} вернул(а) {len(args)} книги"
+        else:
+            raise ValueError(f"{self.fullname} не брал: {args.difference(self.books)}")
+
+
+if __name__ == '__main__':
+    person_1 = LibraryReader("Петров Х.Г.", "375293465958", 123)
+    print(person_1.take_books("Пиноккио", "Курочка-ряба", "Азбука", "Спартак"))
+    print(person_1.return_book("Пиноккио", "Спартак", "Курочка-ряба"))
